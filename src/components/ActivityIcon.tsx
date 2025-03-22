@@ -3,7 +3,7 @@ import React from "react";
 import { 
   Dumbbell, 
   Trophy, 
-  ChessKnight, 
+  BookOpen, 
   Calculator, 
   Languages, 
   Music, 
@@ -11,13 +11,13 @@ import {
   Palette, 
   Pen, 
   PenTool, 
-  Football, 
+  Dices, 
   Microscope,
   ArrowUpRight,
   Waypoints,
   Users,
   Target,
-  Basketball
+  CircleDashed
 } from "lucide-react";
 
 interface ActivityIconProps {
@@ -34,7 +34,7 @@ const ActivityIcon: React.FC<ActivityIconProps> = ({ name, className = "", size 
   } else if (getLowercaseName.includes("throwball")) {
     return <Trophy className={className} size={size} />;
   } else if (getLowercaseName.includes("chess")) {
-    return <ChessKnight className={className} size={size} />;
+    return <BookOpen className={className} size={size} />; // Changed from ChessKnight to BookOpen
   } else if (getLowercaseName.includes("vedic math")) {
     return <Calculator className={className} size={size} />;
   } else if (getLowercaseName.includes("spanish") || getLowercaseName.includes("german") || getLowercaseName.includes("mandarin")) {
@@ -52,7 +52,7 @@ const ActivityIcon: React.FC<ActivityIconProps> = ({ name, className = "", size 
   } else if (getLowercaseName.includes("archery")) {
     return <Target className={className} size={size} />;
   } else if (getLowercaseName.includes("basketball")) {
-    return <Basketball className={className} size={size} />;
+    return <CircleDashed className={className} size={size} />; // Changed from Basketball to CircleDashed
   } else if (getLowercaseName.includes("calligraphy")) {
     return <PenTool className={className} size={size} />;
   } else if (getLowercaseName.includes("creative art")) {
@@ -60,7 +60,7 @@ const ActivityIcon: React.FC<ActivityIconProps> = ({ name, className = "", size 
   } else if (getLowercaseName.includes("creative writing")) {
     return <Pen className={className} size={size} />;
   } else if (getLowercaseName.includes("football")) {
-    return <Football className={className} size={size} />;
+    return <Dices className={className} size={size} />; // Changed from Football to Dices
   }
 
   return <ArrowUpRight className={className} size={size} />;
