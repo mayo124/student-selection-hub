@@ -10,11 +10,17 @@ import { cn } from "@/lib/utils";
 
 interface ProgramSelectionProps {
   onSubmit: (selectedPrograms: SelectedProgram) => void;
+  initialGrade?: Grade;
+  existingSelection?: SelectedProgram | null;
 }
 
-const ProgramSelection: React.FC<ProgramSelectionProps> = ({ onSubmit }) => {
+const ProgramSelection: React.FC<ProgramSelectionProps> = ({ 
+  onSubmit, 
+  initialGrade = 5,
+  existingSelection = null
+}) => {
   const { toast } = useToast();
-  const [activeGrade, setActiveGrade] = useState<Grade>(5);
+  const [activeGrade, setActiveGrade] = useState<Grade>(initialGrade);
   const [selectedPrograms, setSelectedPrograms] = useState<SelectedProgram>({
     monday130: null,
     monday230: null,
@@ -26,6 +32,13 @@ const ProgramSelection: React.FC<ProgramSelectionProps> = ({ onSubmit }) => {
   
   const [filteredPrograms, setFilteredPrograms] = useState<ProgramSlot[]>([]);
   
+  useEffect(() => {
+    // Set existing selection if provided
+    if (existingSelection) {
+      setSelectedPrograms(existingSelection);
+    }
+  }, [existingSelection]);
+
   useEffect(() => {
     setFilteredPrograms(programData.filter(program => program.grade === activeGrade));
   }, [activeGrade]);
@@ -63,10 +76,6 @@ const ProgramSelection: React.FC<ProgramSelectionProps> = ({ onSubmit }) => {
     }
     
     onSubmit(selectedPrograms);
-    toast({
-      title: "Success!",
-      description: "Your activity selections have been submitted",
-    });
   };
 
   const renderDaySection = (day: ActivityDay) => {
@@ -130,7 +139,7 @@ const ProgramSelection: React.FC<ProgramSelectionProps> = ({ onSubmit }) => {
 
   return (
     <div className="w-full animate-fade-in">
-      <Tabs defaultValue="5" className="w-full mb-6">
+      <Tabs defaultValue={String(activeGrade)} className="w-full mb-6">
         <div className="flex justify-center mb-4">
           <TabsList className="grid grid-cols-3 w-full max-w-md">
             <TabsTrigger 
