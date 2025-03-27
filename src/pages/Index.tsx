@@ -7,14 +7,21 @@ import { SelectedProgram } from "@/types/program";
 import { useToast } from "@/hooks/use-toast";
 import { saveProgramSelection, getProgramSelectionByGR } from "@/services/programService";
 import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
+import { Button } from "@/components/ui/button"; // Import the Button component
 
 const Index = () => {
   const { toast } = useToast();
   const [submitted, setSubmitted] = useState(false);
-  const [studentInfo, setStudentInfo] = useState<StudentInfo | null>(null);
+  const [studentInfo, setStudentInfo] = useState<StudentInfo | null>({
+    fullName: "Guest User",
+    grNumber: "GR123456",
+    grade: "5"
+  }); // Set default student info
   const [selectedPrograms, setSelectedPrograms] = useState<SelectedProgram | null>(null);
   const [isLoading, setIsLoading] = useState(false);
   const [viewingExisting, setViewingExisting] = useState(false);
+  // Skip the student info form and go directly to program selection
+  const [showStudentForm, setShowStudentForm] = useState(false);
 
   const handleStudentSubmit = async (data: StudentInfo) => {
     setIsLoading(true);
@@ -82,10 +89,11 @@ const Index = () => {
     setStudentInfo(null);
     setSelectedPrograms(null);
     setViewingExisting(false);
+    setShowStudentForm(true);
   };
 
   const renderSelectionForm = () => {
-    if (!studentInfo) {
+    if (showStudentForm && !studentInfo) {
       return (
         <div className="glass-card p-8 rounded-xl animate-slide-up max-w-md mx-auto">
           <h2 className="text-2xl font-semibold mb-4 text-center">Student Information</h2>
@@ -100,22 +108,22 @@ const Index = () => {
           <div className="bg-white p-4 rounded-lg shadow-sm mb-6">
             <div className="flex flex-wrap items-center justify-between gap-2">
               <div>
-                <h3 className="font-medium">Student: {studentInfo.fullName}</h3>
-                <p className="text-sm text-gray-500">GR Number: {studentInfo.grNumber} | Grade: {studentInfo.grade}</p>
+                <h3 className="font-medium">Student: {studentInfo?.fullName || "Guest User"}</h3>
+                <p className="text-sm text-gray-500">GR Number: {studentInfo?.grNumber || "GR123456"} | Grade: {studentInfo?.grade || "5"}</p>
               </div>
               {viewingExisting && (
                 <div className="bg-amber-100 text-amber-800 px-3 py-1 rounded-full text-sm">
                   Viewing Existing Selection
                 </div>
               )}
-              <Button variant="outline" size="sm" onClick={handleReset}>
+              <Button variant="outline" size="sm" onClick={() => setShowStudentForm(true)}>
                 Change Student
               </Button>
             </div>
           </div>
           <ProgramSelection 
             onSubmit={handleProgramSubmit} 
-            initialGrade={Number(studentInfo.grade) as 5 | 6 | 7}
+            initialGrade={Number(studentInfo?.grade || "5") as 5 | 6 | 7}
             existingSelection={viewingExisting ? selectedPrograms : undefined}
           />
         </>
@@ -140,17 +148,18 @@ const Index = () => {
             />
           </svg>
         </div>
-        <h2 className="text-2xl font-semibold mb-2">Thank You, {studentInfo.fullName}!</h2>
+        <h2 className="text-2xl font-semibold mb-2">Thank You, {studentInfo?.fullName}!</h2>
         <p className="text-gray-600 mb-6">
           Your selection has been successfully submitted. You'll receive a
           confirmation of your program choices soon.
         </p>
-        <button
+        <Button
           onClick={handleReset}
+          size="lg"
           className="px-4 py-2 bg-blue-600 text-white rounded-lg hover:bg-blue-700 transition-colors"
         >
           Make New Selections
-        </button>
+        </Button>
       </div>
     );
   };

@@ -12,6 +12,7 @@ export interface ProgramSelectionData {
   studentInfo: StudentInfo;
   selectedPrograms: SelectedProgram;
   timestamp: Date;
+  id?: string; // Make id optional to allow it in the returned data
 }
 
 // Save program selection to Firestore
